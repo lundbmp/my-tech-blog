@@ -1,5 +1,6 @@
 // required imports
 const express = require("express");
+const sequelize = require('./config/connection');
 
 // express initial set up
 const app = express();
@@ -9,6 +10,9 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// start express server
-app.listen(PORT, () => console.log(`Now listening on PORT: ${PORT}...`));
+// connect to database
+sequelize.sync({ force: false }).then(() => {
+    console.log(`Now connected to database...`);
+    // start express server
+    app.listen(PORT, () => console.log(`Now listening on PORT: ${PORT}...`));
+}); 
