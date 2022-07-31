@@ -27,13 +27,18 @@ router.post("/register", (req, res) => {
     email: email,
     password: password,
   })
-  .then((dbUserData) => {
-    res.json(dbUserData);
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).json(err);
-  });
+    .then((dbUserData) => {
+      res.json(dbUserData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+// Login to create session
+router.post("/login", (req, res) => {
+  const { username, email, password } = req.body;
 });
 
 module.exports = router;
