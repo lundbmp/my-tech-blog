@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { User, Post } = require("../models/index");
 
+// homepage
 router.get("/", (req, res) => {
   Post.findAll({
     include: {
@@ -10,7 +11,6 @@ router.get("/", (req, res) => {
   })
     .then((dbPostData) => {
       const post = dbPostData.map((post) => post.get({ plain: true }));
-      console.log(post);
       res.render("homepage", post[0]);
     })
     .catch((err) => {
@@ -18,5 +18,15 @@ router.get("/", (req, res) => {
       res.status(500).json(err);
     });
 });
+
+// login page
+router.get("/login", (req, res) => {
+  res.render("login");
+});
+
+// signup page
+router.get("/signup", (req, res) => {
+  res.render("signup");
+})
 
 module.exports = router;
