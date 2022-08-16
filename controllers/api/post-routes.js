@@ -78,21 +78,21 @@ router.get("/:id", (req, res) => {
 
 // create post
 router.post("/", (req, res) => {
-  const { title, post_body } = req.body;
   // const user_id = req.session.id;
-
-  Post.create({
-    title: title,
-    post_body: post_body,
-    user_id: 1, // user_id
-  })
-    .then((dbPostData) => {
-      res.json(dbPostData);
+  if (req.session.loggedIn) {
+    Post.create({
+      title: req.body.title,
+      post_body: req.body.post_body,
+      user_id: req.session.user_id, // user_id
     })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+      .then((dbPostData) => {
+        res.json(dbPostData);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  }
 });
 
 // delete post

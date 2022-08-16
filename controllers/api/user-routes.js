@@ -28,7 +28,14 @@ router.post("/register", (req, res) => {
     password: password,
   })
     .then((dbUserData) => {
-      res.json(dbUserData);
+      // log user in after they register
+      req.session.save(() => {
+        req.session.user_id = dbUserData.id;
+        req.session.username = dbUserData.username;
+        req.session.loggedIn = true;
+
+        res.json({ user: dbUserData, message: "You're now logged in..." });
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -38,7 +45,44 @@ router.post("/register", (req, res) => {
 
 // Login to create session
 router.post("/login", (req, res) => {
-  const { username, email, password } = req.body;
+  User.findOne({
+    where: {
+      email: req.body.email,
+    },
+  }).then((dbUserData) => {
+    // false if email address is not in database
+    if (!dbUserData) {
+      console.log("Email address not found...");
+      return;
+    }
+
+    const passwordResult = dbUserData.checkPassword(req.body.password);
+    // check if password is correct
+    if (!passwordResult) {
+      res.status(400).json({ message: "Incorrect password..." });
+      return;
+    }
+
+    // create new session
+    req.session.save(() => {
+      req.session.user_id = dbUserData.id;
+      req.session.username = dbUserData.username;
+      req.session.loggedIn = true;
+
+      res.json({ user: dbUserData, message: "You're now logged in..." });
+    });
+  });
+});
+
+router.post("/logout", (req, res) => {
+  // destroy session if it exists
+  if (req.session.loggedIn) {
+    req.session.destroy(() => {
+      res.status(204).end();
+    });
+  } else {
+    res.status(404).end();
+  }
 });
 
 module.exports = router;
