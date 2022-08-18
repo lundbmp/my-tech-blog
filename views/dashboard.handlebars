@@ -1,0 +1,24 @@
+{{!-- form for posting followed by all of the user posts --}}
+<form class="blog-form">
+    <div>
+        <label for="post-title">Title:</label>
+        <input type="text" id="post-title" />
+    </div>
+    <div>
+        <label for="post-body">Blog:</label>
+        <input type="text" id="post-body" />
+    </div>
+    <div>
+        <button type="submit">Post blog!</button>
+    </div>
+</form>
+
+<ol class="post-list">
+  {{#each posts as |post|}}
+  <li>
+    {{> post-view post }}
+  </li>
+  {{/each}}
+</ol>
+
+<script src="/javascript/blogpost.js"></script>
