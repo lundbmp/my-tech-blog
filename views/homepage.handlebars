@@ -1,7 +1,9 @@
-<ol class="post-list">
-  {{#each posts as |post|}}
-  <li>
-    {{> post-preview post }}
-  </li>
-  {{/each}}
-</ol>
+<div class="container py-5">
+    <div class="post-list">
+        {{#each posts as |post|}}
+        <div>
+            {{> post-preview post }}
+        </div>
+        {{/each}}
+    </div>
+</div>
